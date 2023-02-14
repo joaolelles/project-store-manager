@@ -14,7 +14,14 @@ const selectById = async (id) => {
   return { productById };
 };
 
+const insertProduct = async (product) => {
+  const addProductId = await productModel.insertProduct({ product });
+  const addProduct = await productModel.selectById(addProductId);
+  return { addProduct };
+};
+
 module.exports = {
   selectAll,
   selectById,
+  insertProduct,
 };

@@ -1,4 +1,5 @@
 const { productService } = require('../services');
+const errorMap = require('../utils/errorMap');
 
 const selectAll = async (_req, res) => {
   const { products } = await productService.selectAll();
@@ -14,4 +15,17 @@ const selectById = async (req, res) => {
   return res.status(200).json(productById);
 };
 
-module.exports = { selectAll, selectById };
+const insertProduct = async (req, res) => {
+  const { name } = req.body;
+  const { type, message, addProduct } = await productService.insertProduct(name);
+
+  if (type) return res.status(errorMap.mapError(type)).json(message);
+
+  return res.status(201).json(addProduct);
+};
+
+module.exports = {
+  selectAll,
+  selectById,
+  insertProduct,
+};
