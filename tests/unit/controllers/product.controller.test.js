@@ -5,7 +5,7 @@ const { expect } = chai;
 chai.use(sinonChai);
 const { productService } = require('../../../src/services');
 const { productControler } = require('../../../src/controllers');
-const {  products } = require('./mocks/product.controller.mock');
+const {  products, singleProduct } = require('./mocks/product.controller.mock');
 
 describe('Teste de unidade do productControler', function () {
   describe('Listando os produtos', function() {
@@ -17,12 +17,46 @@ describe('Teste de unidade do productControler', function () {
       res.json = sinon.stub().returns();
       sinon
         .stub(productService, 'selectAll')
-        .resolves({ type: null, message: products });
+        .resolves({ products });
       // act
       await productControler.selectAll(req, res);
       // assert
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(products);
+    });
+    it('Retorna um id invalido', async function () {
+      const res = {};
+      const req = {
+        params: { id: 4 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+        sinon
+          .stub(productService, 'selectById')
+          .resolves({ type: 'INVALID_VALUE', message: 'Product not found' });
+
+      await productControler.selectById(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+    it('Retorna um id valido', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon
+        .stub(productService, 'selectById')
+        .resolves(singleProduct);
+
+      const result = await productControler.selectById(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(result);
     });
   });
   
