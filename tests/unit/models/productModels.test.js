@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { productModel } = require('../../../src/models');
 const conn = require('../../../src/models/connection');
-const { products } = require('./mocks/product.model.mock');
+const { products, addProduct } = require('./mocks/product.model.mock');
 
 describe('Testando a camada model de produtos', function () {
   it('recuperando todos produtos', async function () {
@@ -18,6 +18,12 @@ describe('Testando a camada model de produtos', function () {
     const product = await productModel.selectById(1);
 
     expect(product).to.be.deep.equal(products[0]);
+  });
+  it('adicionando um produto pelo id', async function () {
+    sinon.stub(conn, 'execute').resolves([{ insertId: 4}]);
+    const product = await productModel.insertProduct(addProduct);
+
+    expect(product).to.be.deep.equal(4);
   });
 
     afterEach(function () {

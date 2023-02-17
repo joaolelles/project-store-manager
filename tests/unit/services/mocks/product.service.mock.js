@@ -11,8 +11,19 @@ const products = [
     "id": 3,
     "name": "Escudo do Capitão América"
   }
-]
+];
+
+const validName = 'Escudo do Capitão América'
+
+const productById = {
+  id: 3,
+  name: validName
+}
+
+const invalidName = 'esc';
 
 module.exports = {
   products,
+  productById,
+  invalidName,
 };
