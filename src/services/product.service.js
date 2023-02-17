@@ -20,10 +20,11 @@ const insertProduct = async (product) => {
   return { addProduct };
 };
 
-const updateById = async (id, name) => {
+const updateById = async (name, id) => {
+  if (id === Number) return { type: 404, message: 'Product not found' };
   const product = await productModel.selectById(id);
   if (!product) return { type: 404, message: 'Product not found' };
-  const result = await productModel.updateById(id, name);
+  const result = await productModel.updateById(name, id);
   return { type: null, message: result };
 }; 
 
