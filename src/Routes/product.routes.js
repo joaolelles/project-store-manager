@@ -8,7 +8,7 @@ router.get('/', productControler.selectAll);
 
 router.get('/:id', productControler.selectById);
 
-// router.post('/', validateName, productControler.insertProduct);
+router.post('/', validateName, productControler.insertProduct);
 
 router.put('/:id', validateName, productControler.updateById);
 
