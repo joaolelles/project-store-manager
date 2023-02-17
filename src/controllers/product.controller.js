@@ -25,9 +25,7 @@ const insertProduct = async (req, res) => {
 };
 
 const updateById = async (req, res) => { 
-  console.log('ola');
   const { id } = req.params;
-  console.log(typeof id);
   const { name } = req.body;
   const { type, message } = await productService.updateById(name, id);
   if (type) return res.status(type).json({ message });
