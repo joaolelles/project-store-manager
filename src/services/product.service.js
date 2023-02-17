@@ -23,25 +23,23 @@ const insertProduct = async (product) => {
 };
 
 const updateById = async (name, id) => {
-  // if (id === Number) return { type: 404, message: productNotFound };
   const product = await productModel.selectById(id);
   if (!product) return { type: 404, message: productNotFound };
   const result = await productModel.updateById(name, id);
   return { type: null, message: result };
 }; 
 
-// const deleteById = async (name, id) => {
-//   // if (id === Number) return { type: 404, message: productNotFound };
-//   const product = await productModel.selectById(id);
-//   if (!product) return { type: 404, message: productNotFound };
-//   const result = await productModel.deleteById(name, id);
-//   return { type: null, message: result };
-// }; 
+const deleteById = async (id) => {
+  const product = await productModel.selectById(id);
+  if (!product) return { type: 404, message: productNotFound };
+  await productModel.deleteById(id);
+  return { type: null, message: '' };
+}; 
 
 module.exports = {
   selectAll,
   selectById,
   insertProduct,
   updateById,
-  // deleteById,
+  deleteById,
 };

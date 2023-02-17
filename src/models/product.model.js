@@ -26,18 +26,18 @@ const updateById = async (name, id) => {
   return { name, id };
 };
 
-// const deleteById = async (name, id) => { 
-//   await conn.execute(
-//     'DELETE StoreManager.products SET name = ? WHERE id = ?',
-//     [name, id],
-//   );
-//   return { name, id };
-// };
+const deleteById = async (id) => { 
+  const [result] = await conn.execute(
+    'DELETE FROM StoreManager.products WHERE id = ?',
+    [id],
+  );
+  return result;
+};
 
 module.exports = {
   selectAll,
   selectById,
   insertProduct,
   updateById,
-  // deleteById,
+  deleteById,
 };
