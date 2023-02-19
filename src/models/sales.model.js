@@ -21,31 +21,33 @@ const selectById = async (id) => {
   return camelize(result);
 };
 
-// const creatSale = async () => {
-//   const [{ insertId }] = await conn
-//     .execute(`
-//     INSERT INTO StoreManager.sales () VALUES ()
-//     `);
-//   return insertId;
-// };
+const creatSale = async () => {
+  const [{ insertId }] = await conn
+    .execute(`
+    INSERT INTO StoreManager.sales (date) VALUES (default)
+    `, []);
+  return insertId;
+};
 
-// const insertSale = async (saleId, productId, quantity) => {
-//   const [result] = await conn.execute(`
-//   INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)
-//   `, [saleId, productId, quantity]);
-//   return camelize(result);
-// };
+const insertSale = async (saleId, { productId, quantity }) => {
+  await conn.execute(
+    `INSERT INTO StoreManager.sales_products
+      (sale_id, product_id, quantity) VALUES(?, ?, ?)`,
+    [saleId, productId, quantity],
+  );
+  return { productId, quantity };
+};
 
-// const selectProductId = async (id) => {
-//   const [result] = await conn.execute(`
-//   SELECT product_id FROM StoreManager.sale_products WHERE product_id = ?`, [id]);
-//   return result;
-// };
+const selectProductId = async (id) => {
+  const [result] = await conn.execute(`
+  SELECT product_id FROM StoreManager.sales_products WHERE product_id = ?`, [id]);
+  return result;
+};
 
 module.exports = {
   selectAll,
   selectById,
-  // creatSale,
-  // insertSale,
-  // selectProductId,
+  creatSale,
+  insertSale,
+  selectProductId,
 };

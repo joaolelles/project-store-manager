@@ -1,5 +1,5 @@
 const { salesModel } = require('../models');
-// const { validateSale } = require('./validations/validationsInputValues');
+const { validateSales } = require('./validations/validationsInputValues');
 
 const selectAll = async () => {
   const result = await salesModel.selectAll();
@@ -12,25 +12,35 @@ const selectById = async (id) => {
   return { type: null, message: result };
 };
 
-// const insertSale = async (sales) => {
-//   // validações
-//   const errors = sales.map((sale) => validateSale(sale));
-//   const findError = errors.find((error) => error.type);
-//   if (findError) return findError;
-//   // checando banco de dados do product_id
-//   const mapProductId = sales.map((sale) => salesModel.selectProductId(sale.productId));
-//   const verifyProductId = mapProductId.some((value) => typeof value === 'object');
-//   if (verifyProductId === false) return 'Product no found';
-//   // a inserÇão de fato 
-//   const [insertId] = await salesModel.creatSale();
-//   const promiseCreat = sales.map((sale) => salesModel
-//     .insertSale(insertId, sale.productId, sale.quantity));
-//   const result = await Promise.all(promiseCreat);
-//   return result;
-// };
+const verifyProductId = async (sales) => { 
+  const mapProductId = sales.map((element) => salesModel.selectProductId(element.productId));
+  const result = await Promise.all(mapProductId);
+  return result.some((productId) => !productId.length);
+};
+
+const insertSale = async (sales) => {
+  const errors = sales.map((sale) => validateSales(sale));
+  const findError = errors.find((error) => error.type);
+  if (findError) {
+    if (findError.message.includes('must be greater than or equal to 1')) {
+        return { type: 422, message: findError.message };
+      }      
+    return { type: 400, message: findError.message };
+  }
+  if (await verifyProductId(sales)) return { type: 404, message: 'Product not found' };
+  const insertId = await salesModel.creatSale();
+  const mapSales = sales.map((sale) => salesModel.insertSale(insertId, sale));
+  const promiseSales = await Promise.all(mapSales);
+  const result = {
+   id: insertId,
+   itemsSold: promiseSales,
+  };
+  return { type: null, message: result }; 
+};
 
 module.exports = {
   selectAll,
   selectById,
-  // insertSale,
+  verifyProductId,
+  insertSale,
 };
