@@ -6,9 +6,11 @@ const selectAll = async () => {
   return { result };
 };
 
+const saleNotFound = 'Sale not found';
+
 const selectById = async (id) => {
   const result = await salesModel.selectById(id);
-  if (result.length === 0) return { type: 'PRODUCT_NOT_FOUND', message: 'Sale not found' };
+  if (result.length === 0) return { type: 'PRODUCT_NOT_FOUND', message: saleNotFound };
   return { type: null, message: result };
 };
 
@@ -38,9 +40,17 @@ const insertSale = async (sales) => {
   return { type: null, message: result }; 
 };
 
+const deleteById = async (id) => {
+  const sale = await salesModel.selectProductId(id);
+  if (!sale.length) return { type: 404, message: saleNotFound };
+  await salesModel.deleteById(id);
+  return { type: null, message: '' };
+}; 
+
 module.exports = {
   selectAll,
   selectById,
   verifyProductId,
   insertSale,
+  deleteById,
 };
