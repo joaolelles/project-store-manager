@@ -3,6 +3,7 @@ const { validateSales } = require('./validations/validationsInputValues');
 
 const selectAll = async () => {
   const result = await salesModel.selectAll();
+  console.log(result);
   return { result };
 };
 
