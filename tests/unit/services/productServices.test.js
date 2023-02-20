@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { productService } = require('../../../src/services');
 const { productModel } = require('../../../src/models');
-const { products, productById, validName, invalidName } = require('./mocks/product.service.mock');
+const { products, validName } = require('./mocks/product.service.mock');
 
 describe('Verificando service dos produtos', function () {
   describe('listagem de os todos produtos', function () {
@@ -27,18 +27,6 @@ describe('Verificando service dos produtos', function () {
   });
 
 describe('Cadastrando um produto', function () {
-  // it('requisição caso o name seja inválido', async function () {
-  //   const result = await productService.insertProduct(null);
-
-  //   expect(result.type).to.be.equal('INVALID_VALUE');
-  //   expect(result.message).to.be.equal('"name" is required');
-  // })
-  // it('requisição caso o name tenha menos de 5 caracteres', async function () {
-  //   const result = await productService.insertProduct(invalidName);
-
-  //   expect(result.type).to.be.equal('INVALID_VALUE');
-  //   expect(result.message).to.be.equal('"name" length must be at least 5 characters long');
-  // })
   it('requisição caso o produto tenha valores inválidos', async function () {
     sinon.stub(productModel, 'insertProduct').resolves(3);
 
