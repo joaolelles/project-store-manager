@@ -18,18 +18,19 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3000/products",
-    "url": "http://localhost:3000/products/1",
-    "method": "PUT",
+    "url": "http://localhost:3000/products/search?q=Martelo",
+    "method": "GET",
     "sortNum": 0,
     "created": "2023-02-13T21:32:39.346Z",
-    "modified": "2023-02-17T19:40:55.737Z",
+    "modified": "2023-02-21T02:25:00.443Z",
     "headers": [],
-    "params": [],
-    "body": {
-      "type": "json",
-      "raw": "{\n  \"name\": \"Martelo do Batman\"\n}",
-      "form": []
-    },
+    "params": [
+      {
+        "name": "q",
+        "value": "Martelo",
+        "isPath": false
+      }
+    ],
     "tests": []
   },
   {
@@ -38,15 +39,15 @@
     "containerId": "",
     "name": "http://localhost:3000/sales/",
     "url": "http://localhost:3000/sales/",
-    "method": "GET",
+    "method": "PUT",
     "sortNum": 0,
     "created": "2023-02-15T19:27:45.525Z",
-    "modified": "2023-02-20T19:06:00.664Z",
+    "modified": "2023-02-20T20:44:07.220Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"id\": 3,\n  \"itemsSold\": [\n    {\n      \"productId\": 1,\n      \"quantity\": 1\n    },\n    {\n      \"productId\": 2,\n      \"quantity\": 5\n    }\n  ]\n}",
+      "raw": "[\n  {\n    \"productId\": 1,\n    \"quantity\": 10\n  },\n  {\n    \"productId\": 2,\n    \"quantity\": 50\n  }\n]",
       "form": []
     },
     "tests": []

@@ -39,10 +39,18 @@ const deleteById = async (req, res) => {
   return res.status(204).json(message);
 };
 
+const selectByName = async (req, res) => { 
+  const { q } = req.query;
+  const { type, message } = await productService.selectByName(q);
+  if (type) return res.status(type).json({ message });
+  return res.status(200).json(message);
+}; 
+
 module.exports = {
   selectAll,
   selectById,
   insertProduct,
   updateById,
   deleteById,
+  selectByName,
 };

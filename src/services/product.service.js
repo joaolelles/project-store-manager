@@ -36,10 +36,17 @@ const deleteById = async (id) => {
   return { type: null, message: '' };
 }; 
 
+const selectByName = async (name) => {
+  if (!name) return productModel.selectAll();
+  const product = await productModel.selectByName(name);
+  return { type: null, message: product };
+}; 
+
 module.exports = {
   selectAll,
   selectById,
   insertProduct,
   updateById,
   deleteById,
+  selectByName,
 };

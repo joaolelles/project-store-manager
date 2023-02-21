@@ -52,6 +52,21 @@ const deleteById = async (id) => {
   return result;
 };
 
+const updateById = async (id, { quantity, productId }) => { 
+  await conn.execute(
+    `UPDATE StoreManager.sales_products SET quantity = ? WHERE sale_id = ?
+    AND productId = ?`,
+    [id, quantity, productId],
+  );
+  return { quantity, id };
+};
+
+const selectSaleId = async (id) => {
+  const [result] = await conn.execute(`
+  SELECT sale_id FROM StoreManager.sales_products WHERE sale_id = ?`, [id]);
+  return result;
+};
+
 module.exports = {
   selectAll,
   selectById,
@@ -59,4 +74,6 @@ module.exports = {
   insertSale,
   selectProductId,
   deleteById,
+  updateById,
+  selectSaleId,
 };

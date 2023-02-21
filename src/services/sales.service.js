@@ -48,10 +48,25 @@ const deleteById = async (id) => {
   return { type: null, message: '' };
 }; 
 
+const updateById = async (id, quantity, productId) => {
+  const sale = await salesModel.selectSaleId(id);
+  if (!sale) return { type: 404, message: saleNotFound };
+  const errors = validateSales(sale);
+  if (errors) {
+    if (errors.message.includes('must be greater than or equal to 1')) {
+        return { type: 422, message: errors.message };
+      }      
+    return { type: 400, message: errors.message };
+  }
+  const result = await salesModel.updateById(id, quantity, productId);
+  return { type: null, message: result };
+}; 
+
 module.exports = {
   selectAll,
   selectById,
   verifyProductId,
   insertSale,
   deleteById,
+  updateById,
 };

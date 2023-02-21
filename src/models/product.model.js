@@ -1,3 +1,4 @@
+const camelize = require('camelize');
 const conn = require('./connection');
 
 const selectAll = async () => {
@@ -34,10 +35,19 @@ const deleteById = async (id) => {
   return result;
 };
 
+const selectByName = async (name) => { 
+  const [result] = await conn.execute(
+    `SELECT * FROM StoreManager.products WHERE name LIKE '%${name}%'`,
+    [name],
+  );
+  return camelize(result);
+};
+
 module.exports = {
   selectAll,
   selectById,
   insertProduct,
   updateById,
   deleteById,
+  selectByName,
 };
