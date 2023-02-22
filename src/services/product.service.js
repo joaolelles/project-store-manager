@@ -37,7 +37,10 @@ const deleteById = async (id) => {
 }; 
 
 const selectByName = async (name) => {
-  if (!name) return productModel.selectAll();
+  if (!name) { 
+    const products = await productModel.selectAll();
+    return { type: null, message: products };
+  } 
   const product = await productModel.selectByName(name);
   return { type: null, message: product };
 }; 

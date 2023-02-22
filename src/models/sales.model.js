@@ -52,13 +52,11 @@ const deleteById = async (id) => {
   return result;
 };
 
-const updateById = async (id, { quantity, productId }) => { 
-  await conn.execute(
-    `UPDATE StoreManager.sales_products SET quantity = ? WHERE sale_id = ?
-    AND productId = ?`,
-    [id, quantity, productId],
+const updateById = async (id) => { 
+  const result = await conn.execute(
+    'SELECT * FROM StoreManager.sales_products WHERE sale_id = ?', [id],
   );
-  return { quantity, id };
+  return result;
 };
 
 const selectSaleId = async (id) => {
