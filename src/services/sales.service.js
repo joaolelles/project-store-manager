@@ -48,18 +48,31 @@ const deleteById = async (id) => {
   return { type: null, message: '' };
 }; 
 
-const updateById = async (id, quantity, productId) => {
-  const sale = await salesModel.selectSaleId(id);
-  if (!sale) return { type: 404, message: saleNotFound };
-  const errors = validateSales(sale);
-  if (errors) {
-    if (errors.message.includes('must be greater than or equal to 1')) {
-        return { type: 422, message: errors.message };
+const verifySale = async (id) => { 
+  const result = await salesModel.selectById(id);
+  return result.length;
+};
+
+const updateById = async (id, sales) => {
+  if (!(await verifySale(id))) return { type: 404, message: 'Sale not found' };
+  const errors = sales.map((sale) => validateSales(sale));
+  const findError = errors.find((error) => error.type);
+  if (findError) {
+    if (findError.message.includes('must be greater than or equal to 1')) {
+        return { type: 422, message: findError.message };
       }      
-    return { type: 400, message: errors.message };
+    return { type: 400, message: findError.message };
   }
-  const result = await salesModel.updateById(id, quantity, productId);
-  return { type: null, message: result };
+  if (await verifyProductId(sales)) return { type: 404, message: 'Product not found' };
+  await salesModel.deleteById(id); // deleta a venda que é editada
+  // cria a nova venda
+  const mapSales = sales.map((sale) => salesModel.insertSale(id, sale));
+  const promiseSales = await Promise.all(mapSales);
+  const result = {
+   saleId: id,
+   itemsUpdated: promiseSales,
+  };
+  return { type: null, message: result }; 
 }; 
 
 module.exports = {
