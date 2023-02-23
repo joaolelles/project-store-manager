@@ -1,8 +1,15 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
+const conn = require('../../../src/models/connection');
 const { salesService } = require('../../../src/services');
 const { salesModel } = require('../../../src/models');
-const { sales, saleById } = require('./mocks/sales.service.mock');
+const { sales,
+  saleById,
+  response,
+  saleSucceeded,
+  invalidProductId,
+  quantityZero,
+  quantityNull, } = require('./mocks/sales.service.mock');
 
 describe('Verificando service de sales', function () {
   describe('listagem de as todas sales', function () {
@@ -38,6 +45,47 @@ describe('Verificando service de sales', function () {
       const result = await salesService.deleteById(20);
 
       expect(result).to.be.deep.equal({ type: 404, message: 'Sale not found' });
+    });
+    it('venda feito com sucesso', async function () {
+      sinon.stub(conn, "execute").resolves([[sales[0]]]);
+
+      const result = await salesService.insertSale([
+        {
+          productId: 1,
+          quantity: 20,
+        },
+      ]);
+      expect(result.type).to.equal(null);
+      expect(result.message).to.be.deep.equal({
+        id: undefined,
+        itemsSold: [
+          {
+            productId: 1,
+            quantity: 20,
+          },
+        ],
+      })
+    });
+    it('quantity será igual a 0', async function () {
+      const responde = await salesService.insertSale(quantityZero)
+      expect(responde.type).to.equal(422);
+      expect(responde.message).to.equal(
+        '"quantity" must be greater than or equal to 1'
+      );
+    });
+    it('quantity será null', async function () {
+      const responde = await salesService.insertSale(quantityNull)
+      expect(responde.type).to.equal(400);
+      expect(responde.message).to.equal(
+        '"quantity" must be a number'
+      );
+    });
+    it('ProductId inválido', async function () {
+      const responde = await salesService.insertSale(invalidProductId)
+      expect(responde.type).to.equal(404);
+      expect(responde.message).to.equal(
+        'Product not found'
+      );
     });
   });
 

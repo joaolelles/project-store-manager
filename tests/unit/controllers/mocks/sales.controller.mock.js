@@ -26,7 +26,19 @@ const saleById = [
   }
 ]
 
+const invalidProductId = [
+  {
+    "productId": 999,
+    "quantity": 1
+  },
+  {
+    "productId": 2,
+    "quantity": 5
+  }
+]
+
 module.exports = {
   sales,
   saleById,
+  invalidProductId,
 };

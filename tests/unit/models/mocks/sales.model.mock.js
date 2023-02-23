@@ -26,7 +26,13 @@ const saleById = [
   }
 ]
 
+const singleSale = {
+  "productId": 1,
+  "quantity": 5
+};
+
 module.exports = {
   sales,
   saleById,
+  singleSale,
 };

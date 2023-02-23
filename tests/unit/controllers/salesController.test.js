@@ -5,7 +5,7 @@ const { expect } = chai;
 chai.use(sinonChai);
 const { salesService } = require('../../../src/services');
 const { salesControler } = require('../../../src/controllers');
-const { sales, saleById } = require('./mocks/sales.controller.mock');
+const { sales, saleById, invalidProductId } = require('./mocks/sales.controller.mock');
 
 describe('Teste de unidade do salesControler', function () {
   describe('Listando as sales', function () {
@@ -72,6 +72,21 @@ describe('Teste de unidade do salesControler', function () {
 
       expect(res.status).to.have.been.calledWith(204);
       expect(res.json).to.have.been.calledWith();
+    });
+    it('ProductId inválido', async function () {
+      const res = {};
+      const req = {
+        body: invalidProductId,
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(salesService, 'insertSale').resolves({ type: 404, message: 'Product not found' });
+
+      await salesControler.insertSale(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
     });
   });
 
