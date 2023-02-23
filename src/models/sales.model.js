@@ -44,15 +44,14 @@ const selectProductId = async (id) => {
   return result;
 };
 
-const deleteById = async (id) => { 
-  const [result] = await conn.execute(
+const deleteById = async (id) => {
+  await conn.execute(
     'DELETE FROM StoreManager.sales_products WHERE sale_id = ?',
     [id],
   );
-  return result;
 };
 
-const updateById = async (id) => { 
+const updateById = async (id) => {
   const result = await conn.execute(
     'SELECT * FROM StoreManager.sales_products WHERE sale_id = ?', [id],
   );

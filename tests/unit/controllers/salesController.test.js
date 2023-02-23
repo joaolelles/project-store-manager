@@ -5,10 +5,10 @@ const { expect } = chai;
 chai.use(sinonChai);
 const { salesService } = require('../../../src/services');
 const { salesControler } = require('../../../src/controllers');
-const {  sales, saleById } = require('./mocks/sales.controller.mock');
+const { sales, saleById } = require('./mocks/sales.controller.mock');
 
 describe('Teste de unidade do salesControler', function () {
-  describe('Listando as sales', function() {
+  describe('Listando as sales', function () {
     it('Deve retornar o status 200 e a lista', async function () {
       // arrange
       const res = {};
@@ -32,9 +32,9 @@ describe('Teste de unidade do salesControler', function () {
 
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
-        sinon
-          .stub(salesService, 'selectById')
-          .resolves({ type: 'INVALID_VALUE', message: 'Product not found' });
+      sinon
+        .stub(salesService, 'selectById')
+        .resolves({ type: 'INVALID_VALUE', message: 'Product not found' });
 
       await salesControler.selectById(req, res);
 
@@ -58,8 +58,23 @@ describe('Teste de unidade do salesControler', function () {
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(result);
     });
+    it('Deleta uma sale pelo id', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(salesService, 'deleteById').resolves({ type: null, message: '' });
+
+      await salesControler.deleteById(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+      expect(res.json).to.have.been.calledWith();
+    });
   });
-  
+
   afterEach(function () {
     sinon.restore();
   });

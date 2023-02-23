@@ -54,7 +54,7 @@ const verifySale = async (id) => {
 };
 
 const updateById = async (id, sales) => {
-  if (!(await verifySale(id))) return { type: 404, message: 'Sale not found' };
+  if (!await verifySale(id)) return { type: 404, message: 'Sale not found' };
   const errors = sales.map((sale) => validateSales(sale));
   const findError = errors.find((error) => error.type);
   if (findError) {

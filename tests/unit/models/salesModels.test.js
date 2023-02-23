@@ -19,8 +19,16 @@ describe('Testando a camada model de sales', function () {
 
     expect(sale).to.be.deep.equal(saleById);
   });
+  it('testa se deleta a venda', async function () {
+    sinon.stub(conn, 'execute').resolves(undefined);
 
-    afterEach(function () {
+    const sale = await salesModel.deleteById(1);
+
+    expect(sale).to.be.deep.equal(undefined);
+
+  });
+
+  afterEach(function () {
     sinon.restore();
   });
 });
